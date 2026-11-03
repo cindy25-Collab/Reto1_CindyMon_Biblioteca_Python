@@ -1,0 +1,16 @@
+codigo_socio;nombre;email;codigo_libro
+1;Lucía Martínez;socio01@ejemplo.com;
+2;Hugo García;socio02@ejemplo.com;
+3;Martina López;socio03@ejemplo.com;
+4;Mateo Sánchez;socio04@ejemplo.com;
+5;Sofía Pérez;socio05@ejemplo.com;
+6;Daniel Gómez;socio06@ejemplo.com;
+7;Valeria Martín;socio07@ejemplo.com;
+8;Pablo Jiménez;socio08@ejemplo.com;
+9;Emma Ruiz;socio09@ejemplo.com;
+10;Leo Hernández;socio10@ejemplo.com;
+11;Carla Díaz;socio11@ejemplo.com;
+12;Adrián Moreno;socio12@ejemplo.com;
+13;Alba Muñoz;socio13@ejemplo.com;
+14;Diego Romero;socio14@ejemplo.com;
+15;Claudia Navarro;socio15@ejemplo.com;
