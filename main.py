@@ -1,9 +1,6 @@
-ancho = 30
-archivo = "libros.txt"
-modo = "w"
-encoding = "utf-8"
 
-hline = "+" + ("-" + ancho + "+") * 6
-with open(archivo, modo , encoding) as f:
-    for i in range (7):
-        print(hline, file = f)
+with open("libros.txt", "r") as datos:
+    valores = []
+    for linea in datos:
+        valores.append([str(x) for x in linea.strip().split("\n")])
+    print(valores)
