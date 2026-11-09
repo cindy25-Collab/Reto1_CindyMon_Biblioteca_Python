@@ -3,6 +3,6 @@ class Libro:
         self.codigo = codigo
         self.titulo = titulo
         self.autor = autor
-        self.anio = anio
+        self.anio = int(anio)
         self.categoria = categoria
         self.codigo_socio = codigo_socio
