@@ -6,9 +6,9 @@ from errores.errores_biblioteca import ErrorBiblioteca
 from datetime import datetime
 from pathlib import Path
 
-ARCHIVO = Path(__file__).parent.name / "libros.txt"
-ARCHIVO = Path(__file__).parent.name / "socios.txt"
-LOG = Path(__file__).parent / "log.txt"
+ARCHIVOLIBROS = Path("libros.txt")
+ARCHIVOSOCIOS = Path("socios.txt")
+LOG = Path("log.txt")
 libro_dao = LibroDAO()
 socio_dao = SocioDAO()
 
@@ -51,7 +51,7 @@ def devolver_libro(libros, socios):
             raise ErrorBiblioteca("No se encuentra el libro", socio.libro)
         libro.socio = ""
         socio.libro = ""
-        guardar_log("DEVOLUCION", libro.titulo + " - " + socio.nombre)
+        guardar_log("DEVOLUCIÓN", libro.titulo + " - " + socio.nombre)
         print("Libro devuelto correctamente.")
     except ErrorBiblioteca as error:
         print(error.mensaje, "- Código:", error.codigo)
@@ -92,7 +92,7 @@ def anadir_elemento(libros, socios):
         print("Opción incorrecta.")
 
 def menu():
-    print("\\n===== BIBLIOTECA =====")
+    print("\n===== BIBLIOTECA =====")
     print("1. Mostrar todos los libros")
     print("2. Mostrar libros disponibles")
     print("3. Buscar libro por título")
@@ -102,24 +102,25 @@ def menu():
     print("7. Añadir socio o libro")
     print("8. Guardar y salir")
 
-class main:
+def main():
 
-    with open(ARCHIVO, "r", encoding="utf-8") as archivo:
-        libros = libro_dao.cargar_libros(ARCHIVO)
+    with open(ARCHIVOLIBROS, "r", encoding="utf-8") as archivo_libros:
+        libros = libro_dao.cargar_libros(archivo_libros)
     print("Se han cargado", len(libros), "libros.")
 
-    with open(ARCHIVO, "r", encoding="utf-8") as archivo:
-        socios = socio_dao.cargar_socios()
+    with open(ARCHIVOSOCIOS, "r", encoding="utf-8") as archivo_socios:
+        socios = socio_dao.cargar_socios(archivo_socios)
     print("Se han cargado", len(socios), "socios.")
-    
+
     opcion = ""
     while opcion != "8":
         menu()
         opcion = input("Elige una opción: ")
         if opcion == "1":
-            libro_dao.mostrar_todos(libros)
+            mostrar_libros = libro_dao.mostrar_todos(libros)
+            print(mostrar_libros)
         elif opcion == "2":
-            libro_dao.mostrar_disponibles(libros)
+            print(libro_dao.mostrar_disponibles(libros))
         elif opcion == "3":
             palabra = input("Escribe el título o una parte: ")
             resultados = libro_dao.buscar_por_titulo(libros, palabra)
@@ -133,12 +134,19 @@ class main:
         elif opcion == "5":
             devolver_libro(libros, socios)
         elif opcion == "6":
-            mostrar_prestamos(libros, socios)
+            socios_con_libro = mostrar_prestamos(libros, socios)
+            print(socios_con_libro)
         elif opcion == "7":
             anadir_elemento(libros, socios)
         elif opcion == "8":
-            libro_dao.guardar_libros(libros)
-            socio_dao.guardar_socios(socios)
+            with open(ARCHIVOLIBROS, "w", encoding="utf-8") as archivo_libros:
+                libro_dao.guardar_libros(libros, archivo_libros)
+
+            with open(ARCHIVOSOCIOS, "w", encoding="utf-8") as archivo_socios:
+                socio_dao.guardar_socios(socios, archivo_socios)
             print("Datos guardados. ¡Hasta pronto!")
         else:
             print("Elige un número del 1 al 8.")
+
+if __name__ == "__main__":
+    main()

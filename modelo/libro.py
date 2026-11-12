@@ -8,8 +8,8 @@ class Libro:
         self.socio = socio
 
     def disponible(self):
-        return self.socio is None
+        return not self.socio
 
     def mostrar(self):
         estado = self.disponible()
-        return self.codigo, "-", self.titulo, "-", self.autor, "-", self.anio, "-", self.categoria, "-", estado
+        return self.codigo, self.titulo, self.autor, self.anio, self.categoria, estado

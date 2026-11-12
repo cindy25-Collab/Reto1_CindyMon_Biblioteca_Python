@@ -4,19 +4,22 @@ from modelo.socio import Socio
 
 
 class SocioDAO:
-    def cargar_socios(self, ARCHIVO):
+    def cargar_socios(self, archivo):
         socios = []
-        for linea in ARCHIVO:
-            datos = linea.strip().split("|")
-            socios.append(Socio(*datos))
+
+        next(archivo, None)
+
+        for linea in archivo:
+            codigo, nombre, email, libro = linea.strip().split(";")
+            socios.append(Socio(codigo, nombre, email, libro))
 
         return socios
 
-    def guardar_socios(self, socios, ARCHIVO):
+    def guardar_socios(self, socios, archivo):
         
             for socio in socios:
-                datos = [socio.codigo, socio.nombre, socio.email, socio.libro]
-                ARCHIVO.write("|".join(datos) + "\\n")
+                datos = [socio.codigo, socio.nombre, socio.email, socio.libro or ""]
+                archivo.write(";".join(datos) + "\n")
 
     def buscar_socio(self, socios, codigo):
         for socio in socios:

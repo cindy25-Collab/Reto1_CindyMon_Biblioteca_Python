@@ -1,23 +1,22 @@
-from pathlib import Path
 from modelo.libro import Libro
-
-
-
 class LibroDAO:
-    def cargar_libros(archivo):
+    def cargar_libros(self, archivo):
         libros = []
+
+        next(archivo, None)
+
         for linea in archivo:
-            datos = linea.strip().split("|")
-            libros.append(Libro(*datos))
+            codigo, titulo, autor, anio, categoria, socio = linea.strip().split(";")
+            libros.append(Libro(codigo, titulo, autor, anio, categoria, socio))
         
         return libros
 
-    def guardar_libros(self, libros):
-        with open(ARCHIVO, "w", encoding="utf-8") as archivo:
+    def guardar_libros(self, libros, archivo):
+        
             for libro in libros:
                 datos = [libro.codigo, libro.titulo, libro.autor, libro.anio,
-                        libro.categoria, libro.socio]
-                archivo.write("|".join(datos) + "\\n")
+                        libro.categoria, libro.socio or ""]
+                archivo.write(";".join(datos) + "\n")
 
     def buscar_libro(self, libros, codigo):
         for libro in libros:
@@ -30,9 +29,12 @@ class LibroDAO:
             libro.mostrar()
 
     def mostrar_disponibles(self, libros):
+        libros_disponibles = []
+
         for libro in libros:
             if libro.disponible():
-                libro.mostrar()
+                libros_disponibles.append(libro.mostrar())
+        return libros_disponibles
 
     def buscar_por_titulo(self, libros, palabra):
         resultados = []

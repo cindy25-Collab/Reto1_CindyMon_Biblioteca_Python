@@ -6,7 +6,7 @@ class Socio:
         self.libro = libro
 
     def tiene_libro(self):
-        return self.libro is not None
+        return self.libro is None
 
     def mostrar(self):
         return self.codigo, "-", self.nombre, "-", self.email
