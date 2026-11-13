@@ -1,12 +1,16 @@
 class Socio:
     def __init__(self, codigo, nombre, email, libro=None):
-        self.codigo = codigo
+        self.codigo = str(codigo)
         self.nombre = nombre
         self.email = email
-        self.libro = libro
+        self.libro = libro or None
 
     def tiene_libro(self):
-        return self.libro is None
+        return bool(self.libro)
 
     def mostrar(self):
-        return self.codigo, "-", self.nombre, "-", self.email
+        prestamo = self.libro if self.libro else "Sin libros prestados"
+        return (
+            f"Código: {self.codigo} | Nombre: {self.nombre} | "
+            f"Email: {self.email} | Libro: {prestamo}"
+        )

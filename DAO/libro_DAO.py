@@ -1,22 +1,31 @@
 from modelo.libro import Libro
+
+
 class LibroDAO:
     def cargar_libros(self, archivo):
         libros = []
+        next(archivo, None)  # Saltar la cabecera.
 
-        next(archivo, None)
+        for numero_linea, linea in enumerate(archivo, start=2):
+            linea = linea.rstrip("\r\n")
+            if not linea:
+                continue
+            datos = linea.split(";")
+            if len(datos) != 6:
+                raise ValueError(f"Formato incorrecto en libros.txt, línea {numero_linea}.")
+            codigo, titulo, autor, anio, categoria, socio = datos
+            libros.append(Libro(codigo, titulo, autor, anio, categoria, socio or None))
 
-        for linea in archivo:
-            codigo, titulo, autor, anio, categoria, socio = linea.strip().split(";")
-            libros.append(Libro(codigo, titulo, autor, anio, categoria, socio))
-        
         return libros
 
     def guardar_libros(self, libros, archivo):
-        
-            for libro in libros:
-                datos = [libro.codigo, libro.titulo, libro.autor, libro.anio,
-                        libro.categoria, libro.socio or ""]
-                archivo.write(";".join(datos) + "\n")
+        archivo.write("codigo;titulo;autor;anio;categoria;codigo_socio\n")
+        for libro in libros:
+            datos = [
+                str(libro.codigo), str(libro.titulo), str(libro.autor),
+                str(libro.anio), str(libro.categoria), str(libro.socio or "")
+            ]
+            archivo.write(";".join(datos) + "\n")
 
     def buscar_libro(self, libros, codigo):
         for libro in libros:
@@ -25,23 +34,18 @@ class LibroDAO:
         return None
 
     def mostrar_todos(self, libros):
-        for libro in libros:
-            libro.mostrar()
+        # El DAO prepara los resultados; main.py es quien los muestra.
+        return [libro.mostrar() for libro in libros]
 
     def mostrar_disponibles(self, libros):
-        libros_disponibles = []
-
-        for libro in libros:
-            if libro.disponible():
-                libros_disponibles.append(libro.mostrar())
-        return libros_disponibles
+        return [libro.mostrar() for libro in libros if libro.disponible()]
 
     def buscar_por_titulo(self, libros, palabra):
-        resultados = []
-        for libro in libros:
-            if palabra.lower() in libro.titulo.lower():
-                resultados.append(libro)
-        return resultados
+        palabra = palabra.casefold()
+        return [
+            libro for libro in libros
+            if palabra in libro.titulo.casefold()
+        ]
 
     def anadir_libro(self, libros, libro):
         if self.buscar_libro(libros, libro.codigo) is not None:

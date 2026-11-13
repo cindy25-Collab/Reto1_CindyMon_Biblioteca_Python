@@ -1,15 +1,18 @@
 class Libro:
     def __init__(self, codigo, titulo, autor, anio, categoria, socio=None):
-        self.codigo = codigo
+        self.codigo = str(codigo)
         self.titulo = titulo
         self.autor = autor
-        self.anio = anio
+        self.anio = str(anio)
         self.categoria = categoria
-        self.socio = socio
+        self.socio = socio or None
 
     def disponible(self):
         return not self.socio
 
     def mostrar(self):
-        estado = self.disponible()
-        return self.codigo, self.titulo, self.autor, self.anio, self.categoria, estado
+        estado = "Disponible" if self.disponible() else f"Prestado al socio {self.socio}"
+        return (
+            f"Código: {self.codigo} | Título: {self.titulo} | Autor: {self.autor} | "
+            f"Año: {self.anio} | Categoría: {self.categoria} | Estado: {estado}"
+        )
